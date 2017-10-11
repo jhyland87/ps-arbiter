@@ -29,6 +29,7 @@ prompts[7:time]='%time% '
 prompts[8:timestamp]='%timestamp% '
 prompts[9:advanced]='(${gry}%sessions%${txtrst})[${bldgry}%timestamp%${txtrst}]{%cmdnum%}${bldgrn}%username%@%hostname%${txtrst}:${bldblu}%pwd%${txtrst}${gry}(${txtrst}%cmdstatus%${gry})${txtrst}%prompt% '
 prompts[10:elapsed]="%elapsed%"
+prompts[11:escapechars:escape]="%escapechars%"
 
 declare -A prompt_titles
 
@@ -50,6 +51,7 @@ done
 
 declare -A replacements
 
+#replacements[]=""
 replacements[cmdnum]="\\\#"
 replacements[uid]=$(id -u)
 replacements[gid]=$(id -g)
@@ -64,9 +66,14 @@ replacements[epoch]=$(date +"%s")
 replacements[username]=$(whoami)
 #replacements[pwd]=$(pwd)
 replacements[pwd]="\\\w"
+replacements[dir]="\\\W"
 replacements[prompt]="\$"
+replacements[bashv]="\\\V"
 [[ $(id -u) -eq 0 ]] && replacements[prompt]='#'
 replacements[hostname]=$(hostname -f)
 replacements[procs]=$(ps -U jhyland | sed 1d | wc -l)
+replacements[gitbranch]=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+replacements[jobs]="$(jobs -sp | wc -l)r/$(jobs -rp | wc -l)s" # Show jobs running and stopped like "3r/1s"
+replacements[escapechars]="a: \\\a\\\nd: \\\d\\\nh: \\\h\\\nH: \\\H\\\nj: \\\j\\\nl: \\\l\\\ns: \\\s\\\nt: \\\t\\\nT: \\\T\\\n@: \\\@\\\nA: \\\A\\\nu: \\\u\\\nv: \\\v\\\nV: \\\V\\\nw: \\\w\\\nW: \\\W\\\n"
 
 
