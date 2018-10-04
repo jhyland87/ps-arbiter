@@ -1,0 +1,3 @@
+function idkwtf {
+  echo "idkwtf"
+}
